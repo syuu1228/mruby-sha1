@@ -23,7 +23,7 @@
     (b)[(i) + 3] = (uint8) ( (n)       );       \
 }
 
-void sha1_starts( struct sha1_context *ctx )
+void _sha1_starts( struct sha1_context *ctx )
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -34,7 +34,7 @@ void sha1_starts( struct sha1_context *ctx )
     ctx->state[4] = 0xC3D2E1F0;
 }
 
-void sha1_process( struct sha1_context *ctx, uint8 data[64] )
+void _sha1_process( struct sha1_context *ctx, uint8 data[64] )
 {
     uint32 temp, A, B, C, D, E, W[16];
 
@@ -190,7 +190,7 @@ void sha1_process( struct sha1_context *ctx, uint8 data[64] )
     ctx->state[4] += E;
 }
 
-void sha1_update( struct sha1_context *ctx, uint8 *input, uint32 length )
+void _sha1_update( struct sha1_context *ctx, uint8 *input, uint32 length )
 {
     uint32 left, fill;
 
@@ -208,7 +208,7 @@ void sha1_update( struct sha1_context *ctx, uint8 *input, uint32 length )
     if( left && length >= fill )
     {
         memcpy( (void *) (ctx->buffer + left), (void *) input, fill );
-        sha1_process( ctx, ctx->buffer );
+        _sha1_process( ctx, ctx->buffer );
         length -= fill;
         input  += fill;
         left = 0;
@@ -216,7 +216,7 @@ void sha1_update( struct sha1_context *ctx, uint8 *input, uint32 length )
 
     while( length >= 64 )
     {
-        sha1_process( ctx, input );
+        _sha1_process( ctx, input );
         length -= 64;
         input  += 64;
     }
@@ -235,7 +235,7 @@ static uint8 sha1_padding[64] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-void sha1_finish( struct sha1_context *ctx, uint8 digest[20] )
+void _sha1_finish( struct sha1_context *ctx, uint8 digest[20] )
 {
     uint32 last, padn;
     uint8 msglen[8];
@@ -246,8 +246,8 @@ void sha1_finish( struct sha1_context *ctx, uint8 digest[20] )
     last = ( ctx->total[0] >> 3 ) & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
-    sha1_update( ctx, sha1_padding, padn );
-    sha1_update( ctx, msglen, 8 );
+    _sha1_update( ctx, sha1_padding, padn );
+    _sha1_update( ctx, msglen, 8 );
 
     PUT_UINT32( ctx->state[0], digest,  0 );
     PUT_UINT32( ctx->state[1], digest,  4 );

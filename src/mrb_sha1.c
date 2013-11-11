@@ -29,9 +29,9 @@ mrb_sha1_hex(mrb_state *mrb, mrb_value self)
   }
 
   struct sha1_context ctx;
-  sha1_starts(&ctx);
-  sha1_update(&ctx, (uint8*) RSTRING_PTR(arg), RSTRING_LEN(arg));
-  sha1_finish(&ctx, (uint8*)&digest[0]);
+  _sha1_starts(&ctx);
+  _sha1_update(&ctx, (uint8*) RSTRING_PTR(arg), RSTRING_LEN(arg));
+  _sha1_finish(&ctx, (uint8*)&digest[0]);
 
   for (i = 0; i < 16; i++) {
     digest_hex[i*2+0] = nr2char((digest[i] >> 4) & 0xf);

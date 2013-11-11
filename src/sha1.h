@@ -16,8 +16,8 @@ struct sha1_context
     uint8 buffer[64];
 };
 
-void sha1_starts( struct sha1_context *ctx );
-void sha1_update( struct sha1_context *ctx, uint8 *input, uint32 length );
-void sha1_finish( struct sha1_context *ctx, uint8 digest[20] );
+void _sha1_starts( struct sha1_context *ctx );
+void _sha1_update( struct sha1_context *ctx, uint8 *input, uint32 length );
+void _sha1_finish( struct sha1_context *ctx, uint8 digest[20] );
 
 #endif /* sha1.h */
